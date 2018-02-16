@@ -92,5 +92,15 @@ public class CustomerDao {
 			preStm.executeUpdate();
 		}
 	}
+	
+	static public void deleteCustomer(Connection conn, Customer customer) throws SQLException {
+		if (customer.getId() != 0) {
+			String sql = "DELETE FROM customer where id=?";
+			PreparedStatement preStm = conn.prepareStatement(sql);
+			preStm.setInt(1, customer.getId());
+			preStm.executeUpdate();
+			customer.setId(0);
+		}
+	}
 
 }
