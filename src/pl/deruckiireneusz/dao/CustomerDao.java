@@ -93,6 +93,12 @@ public class CustomerDao {
 		}
 	}
 	
+	/**
+	 * deletes a single customer from database by id
+	 * @param conn
+	 * @param customer
+	 * @throws SQLException
+	 */
 	static public void deleteCustomer(Connection conn, Customer customer) throws SQLException {
 		if (customer.getId() != 0) {
 			String sql = "DELETE FROM customer where id=?";

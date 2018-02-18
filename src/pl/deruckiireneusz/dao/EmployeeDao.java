@@ -6,11 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import pl.deruckiireneusz.model.Customer;
 import pl.deruckiireneusz.model.Employee;
 
 
 public class EmployeeDao {
+	
 	/**
 	 * loads all employees from database and creates an ArrayList
 	 * @param conn
@@ -66,42 +66,55 @@ public class EmployeeDao {
 	/**
 	 * saves or updates the data in the database
 	 * @param conn
-	 * @param customer
+	 * @param employee
 	 * @throws SQLException
 	 */
 	
-	static public void saveCustomerToDB(Connection conn, Customer customer) throws SQLException {
-		if (customer.getId() == 0) {
-			String sql = "INSERT INTO customer (name, surname, birthday) VALUES (?, ?, ?)";
+	static public void saveEmployeeToDB(Connection conn, Employee employee) throws SQLException {
+		if (employee.getId() == 0) {
+			String sql = "INSERT INTO employee (name, surname, address, cellNo, notice, manHourCost) VALUES (?, ?, ?, ?, ?, ?)";
 			String generatedColumns[] = { "ID" };
 			PreparedStatement preStm = conn.prepareStatement(sql, generatedColumns);
-			preStm.setString(1, customer.getName());
-			preStm.setString(2, customer.getSurname());
-			preStm.setString(3, customer.getBirthday());
+			preStm.setString(1, employee.getName());
+			preStm.setString(2, employee.getSurname());
+			preStm.setString(3, employee.getAddress());
+			preStm.setString(4, employee.getCellNo());
+			preStm.setString(5, employee.getNotice());
+			preStm.setDouble(6, employee.getManHourCost());
 			preStm.executeUpdate();
 			ResultSet rs = preStm.getGeneratedKeys();
 			if (rs.next()) {
-				customer.setId(rs.getInt(1));
+				employee.setId(rs.getInt(1));
 			}
 		}
 		else {
-			String sql = "UPDATE customer SET name=?, surname=?, birthday=? where id=?";
+			String sql = "UPDATE employee SET name=?, surname=?, address=?, cellNo=?, notice=?, manHourCost=? where id=?";
 			PreparedStatement preStm = conn.prepareStatement(sql);
-			preStm.setString(1, customer.getName());
-			preStm.setString(2, customer.getSurname());
-			preStm.setString(3, customer.getBirthday());
-			preStm.setInt(4, customer.getId());
+			preStm.setString(1, employee.getName());
+			preStm.setString(2, employee.getSurname());
+			preStm.setString(3, employee.getAddress());
+			preStm.setString(4, employee.getCellNo());
+			preStm.setString(5, employee.getNotice());
+			preStm.setDouble(6, employee.getManHourCost());
+			preStm.setInt(7, employee.getId());
 			preStm.executeUpdate();
 		}
 	}
 	
-	static public void deleteCustomer(Connection conn, Customer customer) throws SQLException {
-		if (customer.getId() != 0) {
-			String sql = "DELETE FROM customer where id=?";
+	/**
+	 * deletes a single employee from database by id
+	 * @param conn
+	 * @param employee
+	 * @throws SQLException
+	 */
+	
+	static public void deleteEmployee(Connection conn, Employee employee) throws SQLException {
+		if (employee.getId() != 0) {
+			String sql = "DELETE FROM employee where id=?";
 			PreparedStatement preStm = conn.prepareStatement(sql);
-			preStm.setInt(1, customer.getId());
+			preStm.setInt(1, employee.getId());
 			preStm.executeUpdate();
-			customer.setId(0);
+			employee.setId(0);
 		}
 	}
 

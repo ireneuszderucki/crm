@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import pl.deruckiireneusz.dao.CustomerDao;
-import pl.deruckiireneusz.model.Customer;
+import pl.deruckiireneusz.dao.EmployeeDao;
+import pl.deruckiireneusz.model.Employee;
 import pl.deruckiireneusz.services.DbUtil;
 import pl.deruckiireneusz.services.MultiHelper;
 
@@ -36,7 +36,7 @@ public class AddEmployee extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		getServletContext().getRequestDispatcher("/WEB-INF/views/AddCustomer.jsp")
+		getServletContext().getRequestDispatcher("/WEB-INF/views/AddEmployee.jsp")
 		.forward(request, response);
 	}
 
@@ -48,16 +48,22 @@ public class AddEmployee extends HttpServlet {
 			Connection conn = DbUtil.getConn();
 			String name = request.getParameter("name").trim();
 			String surname = request.getParameter("surname").trim();
-			String birthday = request.getParameter("birthday").trim();
+			String address = request.getParameter("address").trim();
+			String cellNo = request.getParameter("cellNo").trim();
+			String notice = request.getParameter("notice").trim();
+			Double manHourCost = Double.parseDouble(request.getParameter("manHourCost"));
 				if (MultiHelper.atLeastThreeChars(name) &&
 					MultiHelper.atLeastThreeChars(surname) &&
-					MultiHelper.atLeastThreeChars(birthday)) {
-					Customer customer = new Customer(name, surname, birthday);
-					CustomerDao.saveCustomerToDB(conn, customer);
-					response.sendRedirect("AllCustomers");
+					MultiHelper.atLeastThreeChars(address) &&
+					MultiHelper.atLeastThreeChars(cellNo) &&
+					MultiHelper.atLeastThreeChars(notice) &&
+					manHourCost > 0) {
+					Employee employee= new Employee(name, surname, address, cellNo, notice, manHourCost);
+					EmployeeDao.saveEmployeeToDB(conn, employee);
+					response.sendRedirect("AllEmployees");
 				}
 				else {
-					response.sendRedirect("AddCustomer");
+					response.sendRedirect("AddEmployee");
 				}
 			
 			

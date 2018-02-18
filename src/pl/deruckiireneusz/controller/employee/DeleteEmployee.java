@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import pl.deruckiireneusz.dao.CustomerDao;
-import pl.deruckiireneusz.model.Customer;
+import pl.deruckiireneusz.dao.EmployeeDao;
+import pl.deruckiireneusz.model.Employee;
 import pl.deruckiireneusz.services.DbUtil;
 
 /**
@@ -36,13 +36,13 @@ public class DeleteEmployee extends HttpServlet {
 		try {
 			Connection conn = DbUtil.getConn();
 			int id = Integer.parseInt(request.getParameter("id"));
-			Customer customer = CustomerDao.loadCustomerById(conn, id);
-			request.setAttribute("customer", customer);
+			Employee employee = EmployeeDao.loadEmployeeById(conn, id);
+			request.setAttribute("employee", employee);
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		getServletContext().getRequestDispatcher("/WEB-INF/views/DeleteCustomer.jsp")
+		getServletContext().getRequestDispatcher("/WEB-INF/views/DeleteEmployee.jsp")
 		.forward(request, response);
 	
 	}
@@ -56,12 +56,12 @@ public class DeleteEmployee extends HttpServlet {
 			int id = Integer.parseInt(request.getParameter("id"));
 			String yes = request.getParameter("yes");
 			if (yes != null) {
-				Customer customer = CustomerDao.loadCustomerById(conn, id);
-				CustomerDao.deleteCustomer(conn, customer);
-				response.sendRedirect("AllCustomers");
+				Employee employee = EmployeeDao.loadEmployeeById(conn, id);
+				EmployeeDao.deleteEmployee(conn, employee);
+				response.sendRedirect("AllEmployees");
 			}
 			else {
-				response.sendRedirect("AllCustomers");
+				response.sendRedirect("AllEmployees");
 				
 			}
 			

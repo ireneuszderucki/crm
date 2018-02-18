@@ -67,7 +67,7 @@ public class EditCustomer extends HttpServlet {
 					response.sendRedirect("AllCustomers");
 				}
 				else {
-					response.sendRedirect("EditCustomer");
+					response.sendRedirect("EditCustomer?id=" + id);
 				}
 			
 			

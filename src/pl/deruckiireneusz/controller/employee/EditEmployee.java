@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import pl.deruckiireneusz.dao.CustomerDao;
-import pl.deruckiireneusz.model.Customer;
+import pl.deruckiireneusz.dao.EmployeeDao;
+import pl.deruckiireneusz.model.Employee;
 import pl.deruckiireneusz.services.DbUtil;
 import pl.deruckiireneusz.services.MultiHelper;
 
@@ -38,13 +38,13 @@ public class EditEmployee extends HttpServlet {
 		try {
 			Connection conn = DbUtil.getConn();
 			int id = Integer.parseInt(request.getParameter("id"));
-			Customer customer = CustomerDao.loadCustomerById(conn, id);
-			request.setAttribute("customer", customer);
+			Employee employee = EmployeeDao.loadEmployeeById(conn, id);
+			request.setAttribute("employee", employee);
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		getServletContext().getRequestDispatcher("/WEB-INF/views/EditCustomer.jsp")
+		getServletContext().getRequestDispatcher("/WEB-INF/views/EditEmployee.jsp")
 		.forward(request, response);
 	}
 
@@ -57,17 +57,23 @@ public class EditEmployee extends HttpServlet {
 			int id = Integer.parseInt(request.getParameter("id"));
 			String name = request.getParameter("name").trim();
 			String surname = request.getParameter("surname").trim();
-			String birthday = request.getParameter("birthday").trim();
+			String address = request.getParameter("address").trim();
+			String cellNo = request.getParameter("cellNo").trim();
+			String notice = request.getParameter("notice").trim();
+			Double manHourCost = Double.parseDouble(request.getParameter("manHourCost"));
 				if (MultiHelper.atLeastThreeChars(name) &&
 					MultiHelper.atLeastThreeChars(surname) &&
-					MultiHelper.atLeastThreeChars(birthday)) {
-					Customer customer = new Customer(name, surname, birthday);
-					customer.setId(id);
-					CustomerDao.saveCustomerToDB(conn, customer);
-					response.sendRedirect("AllCustomers");
+					MultiHelper.atLeastThreeChars(address) &&
+					MultiHelper.atLeastThreeChars(cellNo) &&
+					MultiHelper.atLeastThreeChars(notice) &&
+					manHourCost > 0) {
+					Employee employee= new Employee(name, surname, address, cellNo, notice, manHourCost);
+					employee.setId(id);
+					EmployeeDao.saveEmployeeToDB(conn, employee);
+					response.sendRedirect("AllEmployees");
 				}
 				else {
-					response.sendRedirect("EditCustomer");
+					response.sendRedirect("EditEmployee?id=" + id);
 				}
 			
 			

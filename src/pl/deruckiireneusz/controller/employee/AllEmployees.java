@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import pl.deruckiireneusz.dao.CustomerDao;
-import pl.deruckiireneusz.model.Customer;
+import pl.deruckiireneusz.dao.EmployeeDao;
+import pl.deruckiireneusz.model.Employee;
 import pl.deruckiireneusz.services.DbUtil;
 
 
@@ -38,18 +38,18 @@ public class AllEmployees extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			Connection conn = DbUtil.getConn();
-			ArrayList<Customer> customers = CustomerDao.loadAllCustomers(conn);
-			if (customers.isEmpty()) {
-				String defaultMsg = "No customers so far";
+			ArrayList<Employee> employees = EmployeeDao.loadAllEmployees(conn);
+			if (employees.isEmpty()) {
+				String defaultMsg = "No employees so far";
 				request.setAttribute("defaultMsg", defaultMsg);
 			}
 			else {
-				request.setAttribute("customers", customers);
+				request.setAttribute("employees", employees);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		getServletContext().getRequestDispatcher("/WEB-INF/views/AllCustomers.jsp")
+		getServletContext().getRequestDispatcher("/WEB-INF/views/AllEmployees.jsp")
 		.forward(request, response);
 	}
 
